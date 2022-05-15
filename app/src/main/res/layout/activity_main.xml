@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tipText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="팁입니다."
+        android:textSize="30sp"
+        android:gravity="center"/>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="2"
+            android:layout_margin="10dp">
+            <Button
+                android:id="@+id/weatherButton"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_weight="1"
+                android:text="날씨"
+                android:textSize="25sp"
+                android:layout_margin="10dp"/>
+            <Button
+                android:id="@+id/covidButton"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_weight="1"
+                android:text="코로나"
+                android:textSize="25sp"
+                android:layout_margin="10dp"/>
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/cotButton"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:text="꽃가루, 황사"
+                android:textSize="22sp" />
+
+            <Button
+                android:id="@+id/mdButton"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_weight="1"
+                android:textSize="22sp"
+                android:layout_margin="10dp"
+                android:text="미세먼지" />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
