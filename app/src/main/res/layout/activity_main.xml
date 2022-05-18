@@ -11,9 +11,18 @@
         android:id="@+id/tipText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#D5EFA3"
+        android:gravity="center"
         android:text="팁입니다."
-        android:textSize="30sp"
-        android:gravity="center"/>
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/mainImg"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/heart" />
+
 
     <TableLayout
         android:layout_width="match_parent"
