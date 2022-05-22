@@ -10,6 +10,32 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import org.json.simple.JSONObject;
+
+import android.os.Build;
+import org.json.simple.JSONArray;
+import org.json.JSONException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.io.InputStreamReader;
+import java.net.URLEncoder;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.simple.parser.JSONParser;
+
+import org.json.JSONException;
+import org.json.simple.parser.ParseException;
+import org.w3c.dom.Text;
+
+import java.time.ZoneId;
+
+import java.sql.Date;
 
 import org.w3c.dom.Text;
 
@@ -44,6 +70,15 @@ public class MainActivity extends AppCompatActivity {
         tipStr[2] = "3번 팁";
         tipStr[3] = "4번 팁";
         t = new Timer();
+
+        long now = System.currentTimeMillis();
+        Date dateSys = new Date(now);
+        String dateSys_Str = dateSys.toString();
+        //System.out.println(dateSys_Str);
+        String year = dateSys_Str.substring(0, 4);
+        String month = dateSys_Str.substring(5, 7);
+        String day = dateSys_Str.substring(8, 10);
+
 
         // 할당
         timerTask = new TimerTask() {
