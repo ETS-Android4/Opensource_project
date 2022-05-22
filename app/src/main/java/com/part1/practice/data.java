@@ -8,6 +8,15 @@ public class data {
     jopcho jopcho_data;
     weather weather_data;
 
+    data(){
+        airKorDust_data = new air_kor_dust();
+        chunsik_data = new chunsik();
+        soTree_data = new soTree();
+        charmTree_data = new charmTree();
+        jopcho_data = new jopcho();
+        weather_data = new weather();
+    }
+
     public class air_kor_dust {
         //Air Kor의 데이터는 가장 최신의 데이터만 전해주기에 time에 대한 data 필요 없음
         String sidoName;
@@ -108,6 +117,7 @@ public class data {
         TMN 일 최저 기온
         TMX 일 최고 기온
          */
+        String base_date;
         String pop = "-1";
         String pty = "-1";
         String pcp = "-1";
@@ -154,6 +164,5 @@ public class data {
             }
         }
     }
-
 
 }

@@ -34,6 +34,8 @@ import java.sql.Date;
 
 public class MainActivity extends AppCompatActivity {
 
+    data input = new data();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,18 +50,18 @@ public class MainActivity extends AppCompatActivity {
         String day = dateSys_Str.substring(8, 10);
         new Thread(()-> {
             try {
-                //getAirKor();
-                //getWeather_charmTree();
-                //getCorona();
-                //getWeather_chunsik();
-                getWeather();
+                //getAirKor(input);
+                //getWeather_charmTree(input);
+                //getCorona(input);
+                //getWeather_chunsik(input);
+                getWeather(input);
             } catch (IOException /*| JSONException*/ | ParseException e) {
                 e.printStackTrace();
             }
         }).start();
     }
 
-    void getAirKor() throws IOException, ParseException {
+    void getAirKor(data in) throws IOException, ParseException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=T%2FL6AKT1fsWyadGE1j3QYFXgSmOWWV375pu6qQxuQ612F22wflZp0Ey%2BdjuPCZ8XeoShMs%2FaOPn3QJfpkbTlTw%3D%3D"); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("returnType","UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8")); /*xml 또는 json*/
@@ -71,9 +73,8 @@ public class MainActivity extends AppCompatActivity {
         BufferedReader bf;
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
         String result = bf.readLine();
-        //파싱이 아직 안됨
-        System.out.println(result);
 
+        System.out.println(result);
 
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
@@ -82,17 +83,26 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("body = " + body);
         JSONObject totalCount = (JSONObject)jsonObject.get("totalCount");
         JSONArray item = (JSONArray)body.get("items");
+
         for (int i = 0; i < item.size(); i++)
         {
             JSONObject items = (JSONObject) item.get(i);
-            System.out.println("시도명: " + items.get("sidoName").toString());
-            System.out.println("지역명: " + items.get("stationName").toString());
-            System.out.println("pm25Val: " + items.get("pm25Value").toString());
-            System.out.println("pm10Val: " + items.get("pm10Value").toString());
+            String sido = items.get("sidoName").toString();
+            //System.out.println("시도명: " + items.get("sidoName").toString());
+            if (sido != "광진구")
+                continue;
+
+            in.airKorDust_data.setPm10val(items.get("pm10Value").toString());
+            in.airKorDust_data.setStationName(items.get("stationName").toString());
+            in.airKorDust_data.setPm25val(items.get("pm25Value").toString());
+
+            //System.out.println("지역명: " + items.get("stationName").toString());
+            //System.out.println("pm25Val: " + items.get("pm25Value").toString());
+            //System.out.println("pm10Val: " + items.get("pm10Value").toString());
         }
     }
 
-    void get_Allergy_charmTree() throws IOException, ParseException {
+    void get_Allergy_charmTree(data in) throws IOException, ParseException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/HealthWthrIdxServiceV2/getOakPollenRiskIdxV2"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=T%2FL6AKT1fsWyadGE1j3QYFXgSmOWWV375pu6qQxuQ612F22wflZp0Ey%2BdjuPCZ8XeoShMs%2FaOPn3QJfpkbTlTw%3D%3D"); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("dataType","UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8")); /*통보시간 검색(조회 날짜 입력이 없을 경우 한달동안 예보통보 발령 날짜의 리스트 정보를 확인)*/
@@ -114,13 +124,16 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < itemArr.size(); i++)
         {
             JSONObject item = (JSONObject) itemArr.get(i);
-            System.out.println("날짜: " + item.get("date").toString());
-            System.out.println("오늘 위험도: " + item.get("today").toString());
-            System.out.println("내일 위험도: " + item.get("tomorrow").toString());
+            in.charmTree_data.setDate(item.get("date").toString());
+            in.charmTree_data.setToday_val(item.get("today").toString());
+            in.charmTree_data.setTomorrow_val(item.get("tomorrow").toString());
+            //System.out.println("날짜: " + item.get("date").toString());
+            //System.out.println("오늘 위험도: " + item.get("today").toString());
+            //System.out.println("내일 위험도: " + item.get("tomorrow").toString());
         }
     }
 
-    void get_Allergy_SoTree() throws IOException, ParseException {
+    void get_Allergy_SoTree(data in) throws IOException, ParseException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/HealthWthrIdxServiceV2/getPinePollenRiskIdxV2"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=T%2FL6AKT1fsWyadGE1j3QYFXgSmOWWV375pu6qQxuQ612F22wflZp0Ey%2BdjuPCZ8XeoShMs%2FaOPn3QJfpkbTlTw%3D%3D"); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("dataType","UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8")); /*통보시간 검색(조회 날짜 입력이 없을 경우 한달동안 예보통보 발령 날짜의 리스트 정보를 확인)*/
@@ -133,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         BufferedReader bf;
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
         String result = bf.readLine();
-        //파싱이 아직 안됨
+
         System.out.println(result);
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
@@ -144,13 +157,18 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < itemArr.size(); i++)
         {
             JSONObject item = (JSONObject) itemArr.get(i);
-            System.out.println("날짜: " + item.get("date").toString());
-            System.out.println("오늘 위험도: " + item.get("today").toString());
-            System.out.println("내일 위험도: " + item.get("tomorrow").toString());
+
+            in.soTree_data.setDate(item.get("date").toString());
+            in.soTree_data.setToday_val(item.get("today").toString());
+            in.soTree_data.setTomorrow_val(item.get("tomorrow").toString());
+
+            //System.out.println("날짜: " + item.get("date").toString());
+            //System.out.println("오늘 위험도: " + item.get("today").toString());
+            //System.out.println("내일 위험도: " + item.get("tomorrow").toString());
         }
     }
 
-    void get_Allergy_Jopcho() throws IOException, ParseException {
+    void get_Allergy_Jopcho(data in) throws IOException, ParseException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/HealthWthrIdxServiceV2/getWeedsPollenRiskndxV2"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=T%2FL6AKT1fsWyadGE1j3QYFXgSmOWWV375pu6qQxuQ612F22wflZp0Ey%2BdjuPCZ8XeoShMs%2FaOPn3QJfpkbTlTw%3D%3D"); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("dataType","UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8"));
@@ -174,13 +192,18 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < itemArr.size(); i++)
         {
             JSONObject item = (JSONObject) itemArr.get(i);
-            System.out.println("날짜: " + item.get("date").toString());
-            System.out.println("오늘 위험도: " + item.get("today").toString());
-            System.out.println("내일 위험도: " + item.get("tomorrow").toString());
+
+            in.jopcho_data.setDate(item.get("date").toString());
+            in.jopcho_data.setDate(item.get("today").toString());
+            in.jopcho_data.setDate(item.get("tomorrow").toString());
+
+            //System.out.println("날짜: " + item.get("date").toString());
+            //System.out.println("오늘 위험도: " + item.get("today").toString());
+            //System.out.println("내일 위험도: " + item.get("tomorrow").toString());
         }
     }
 
-    void get_Allergy_Chunsik() throws IOException, ParseException {
+    void get_Allergy_Chunsik(data in) throws IOException, ParseException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/HealthWthrIdxServiceV2/getAsthmaIdxV2"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=T%2FL6AKT1fsWyadGE1j3QYFXgSmOWWV375pu6qQxuQ612F22wflZp0Ey%2BdjuPCZ8XeoShMs%2FaOPn3QJfpkbTlTw%3D%3D"); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("dataType","UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8")); /*통보시간 검색(조회 날짜 입력이 없을 경우 한달동안 예보통보 발령 날짜의 리스트 정보를 확인)*/
@@ -204,14 +227,19 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < itemArr.size(); i++)
         {
             JSONObject item = (JSONObject) itemArr.get(i);
-            System.out.println("날짜: " + item.get("date").toString());
-            System.out.println("오늘 위험도: " + item.get("today").toString());
-            System.out.println("내일 위험도: " + item.get("tomorrow").toString());
+
+            in.chunsik_data.setDate(item.get("date").toString());
+            in.chunsik_data.setDate(item.get("today").toString());
+            in.chunsik_data.setDate(item.get("tomorrow").toString());
+
+            //System.out.println("날짜: " + item.get("date").toString());
+            //System.out.println("오늘 위험도: " + item.get("today").toString());
+            //System.out.println("내일 위험도: " + item.get("tomorrow").toString());
         }
 
     }
 
-    void getWeather() throws IOException, ParseException {
+    void getWeather(data in) throws IOException, ParseException {
         //초단기 실황 조회
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=T%2FL6AKT1fsWyadGE1j3QYFXgSmOWWV375pu6qQxuQ612F22wflZp0Ey%2BdjuPCZ8XeoShMs%2FaOPn3QJfpkbTlTw%3D%3D"); /*Service Key*/
@@ -254,12 +282,15 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < itemArr.size(); i++)
         {
             JSONObject item = (JSONObject) itemArr.get(i);
-            System.out.println("날짜: " + item.get("baseDate").toString());
-            System.out.println("기준 시간: " + item.get("baseTime").toString());
-            System.out.println("날씨: " + item.get("category").toString());
-            System.out.println("실황 값: " + item.get("obsrValue"));
-        }
-    }
 
+            in.weather_data.setValue(item.get("category").toString(), item.get("obsrValue").toString());
+
+            //System.out.println("날짜: " + item.get("baseDate").toString());
+            //System.out.println("기준 시간: " + item.get("baseTime").toString());
+            //System.out.println("날씨: " + item.get("category").toString());
+            //System.out.println("실황 값: " + item.get("obsrValue").toString());
+        }
+        in.weather_data.set_dif_temp();
+    }
 
 }
