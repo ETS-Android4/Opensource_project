@@ -33,7 +33,11 @@ import java.time.ZoneId;
 import java.sql.Date;
 
 public class Microdust extends AppCompatActivity {
-    TextView pm10, pm25;
+    TextView pm10, pm25, t1, t2;
+
+    String p1 = new String();
+    String p2 = new String();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,20 +48,31 @@ public class Microdust extends AppCompatActivity {
 
         pm10 = findViewById(R.id.textView);
         pm25 = findViewById(R.id.textView2);
+        t1 = findViewById(R.id.pm10En);
+        t2 = findViewById(R.id.pm25En);
+        p1 = "dd";
         //할당
 
-        new Thread(()-> {
-            try {
-                getAirKor();
-                //getWeather_flower();
-                //getCorona();
-                //getWeather_chunsik();
-                //getWeather();
-            } catch (IOException /*| JSONException*/ | ParseException e) {
-                e.printStackTrace();
+        new Thread((new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    getAirKor();
+                } catch (IOException /*| JSONException*/ | ParseException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        pm10.setText(p1);
+                        pm25.setText(p2);
+                    }
+                });
             }
-        }).start();
+        })).start();
 
+        System.out.println("ee"+p1);
+        pm10.setText(p1);
 
     }
 
@@ -87,12 +102,17 @@ public class Microdust extends AppCompatActivity {
         for (int i = 0; i < item.size(); i++)
         {
             JSONObject items = (JSONObject) item.get(i);
-            System.out.println("시도명: " + items.get("sidoName").toString());
-            System.out.println("지역명: " + items.get("stationName").toString());
-            System.out.println("pm25Val: " + items.get("pm25Value").toString());
-            pm25.setText(items.get("pm25Value").toString());
-            System.out.println("pm10Val: " + items.get("pm10Value").toString());
-            pm10.setText(items.get("pm10Value").toString());
+            String str = items.get("stationName").toString();
+            String sung = "성동구";
+            if(str.equals(sung)){
+                System.out.println(items.get("pm25Value").toString());
+                //pm10.setText(items.get("pm10Value").toString());
+                //pm25.setText(items.get("pm25Value").toString());
+                p1 = items.get("pm10Value").toString();
+                System.out.println("p1: "+p1);
+                p2 = items.get("pm25Value").toString();
+
+            }//성동구 미세먼지 할당
         }
     }
 
