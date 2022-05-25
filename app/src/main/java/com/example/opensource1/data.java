@@ -7,6 +7,7 @@ public class data {
     charmTree charmTree_data;
     jopcho jopcho_data;
     weather weather_data;
+    cold cold_data;
     String testStr = new String("teststr");
 
     data(){
@@ -16,6 +17,7 @@ public class data {
         charmTree_data = new charmTree();
         jopcho_data = new jopcho();
         weather_data = new weather();
+        cold_data = new cold();
     }
 
     public class air_kor_dust {
@@ -61,6 +63,13 @@ public class data {
         String today_val;
         String tomorrow_val;
 
+        public boolean checkValid(NowTime t){
+            int month_int = Integer.parseInt(t.getMonth());
+            if (month_int < 4 || month_int > 6)
+                return false;
+            return true;
+        }
+
         public void setDate(String date) {
             this.date = date;
         }
@@ -77,6 +86,14 @@ public class data {
         String today_val;
         String tomorrow_val;
 
+
+        public boolean checkValid(NowTime t){
+            int month_int = Integer.parseInt(t.getMonth());
+            if (month_int < 4 || month_int > 6)
+                return false;
+            return true;
+        }
+
         public void setDate(String date) {
             this.date = date;
         }
@@ -89,6 +106,30 @@ public class data {
     }
 
     public class jopcho {
+        String date;
+        String today_val;
+        String tomorrow_val;
+
+
+        public boolean checkValid(NowTime t){
+            int month_int = Integer.parseInt(t.getMonth());
+            if (month_int < 8 || month_int > 10)
+                return false;
+            return true;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+        public void setToday_val(String today_val) {
+            this.today_val = today_val;
+        }
+        public void setTomorrow_val(String tomorrow_val) {
+            this.tomorrow_val = tomorrow_val;
+        }
+    }
+
+    public class cold {
         String date;
         String today_val;
         String tomorrow_val;
