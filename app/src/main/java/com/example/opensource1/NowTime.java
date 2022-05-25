@@ -20,6 +20,21 @@ public class NowTime {
         this.Initalization();
     }
 
+    public String getMonth() {
+        return this.month;
+    }
+    public String getDay() {
+        return this.day;
+    }
+    public String getYear() {
+        return this.year;
+    }
+    public String getHour() {
+        return this.hour;
+    }
+
+
+
 
     public void Initalization() {
         //오늘
