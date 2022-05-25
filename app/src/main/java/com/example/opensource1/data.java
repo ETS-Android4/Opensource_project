@@ -7,6 +7,7 @@ public class data {
     charmTree charmTree_data;
     jopcho jopcho_data;
     weather weather_data;
+    cold cold_data;
     String testStr = new String("teststr");
 
     data(){
@@ -16,6 +17,7 @@ public class data {
         charmTree_data = new charmTree();
         jopcho_data = new jopcho();
         weather_data = new weather();
+        cold_data = new cold();
     }
 
     public class air_kor_dust {
@@ -41,8 +43,8 @@ public class data {
 
     public class chunsik {
         String date;
-        String today_val;
-        String tomorrow_val;
+        String today_val = new String("0");
+        String tomorrow_val = new String("0");
 
         public void setDate(String date) {
             this.date = date;
@@ -58,8 +60,14 @@ public class data {
     //각 알러지 데이터는 위험도가 0 1 2 3 으로 0이 낮음 1이 보통 2가 높음 3이 매우높음임
     public class soTree {
         String date;
-        String today_val;
-        String tomorrow_val;
+        String today_val = new String("0");
+        String tomorrow_val = new String("0");
+        public boolean checkValid(NowTime t){
+            int month_int = Integer.parseInt(t.getMonth());
+            if (month_int < 4 || month_int > 6)
+                return false;
+            return true;
+        }
 
         public void setDate(String date) {
             this.date = date;
@@ -74,9 +82,14 @@ public class data {
 
     public class charmTree {
         String date;
-        String today_val;
-        String tomorrow_val;
-
+        String today_val = new String("0");
+        String tomorrow_val = new String("0");
+        public boolean checkValid(NowTime t){
+            int month_int = Integer.parseInt(t.getMonth());
+            if (month_int < 4 || month_int > 6)
+                return false;
+            return true;
+        }
         public void setDate(String date) {
             this.date = date;
         }
@@ -90,8 +103,36 @@ public class data {
 
     public class jopcho {
         String date;
-        String today_val;
-        String tomorrow_val;
+        String today_val = new String("0");
+        String tomorrow_val = new String("0");
+        public boolean checkValid(NowTime t){
+            int month_int = Integer.parseInt(t.getMonth());
+            if (month_int < 8 || month_int > 10)
+                return false;
+            return true;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+        public void setToday_val(String today_val) {
+            this.today_val = today_val;
+        }
+        public void setTomorrow_val(String tomorrow_val) {
+            this.tomorrow_val = tomorrow_val;
+        }
+    }
+    public class cold {
+        String date;
+        String today_val = new String("0");
+        String tomorrow_val = new String("0");
+
+        public boolean checkValid(NowTime t){
+            int month_int = Integer.parseInt(t.getMonth());
+            if (month_int < 9 && month_int > 4)
+                return false;
+            return true;
+        }
 
         public void setDate(String date) {
             this.date = date;
