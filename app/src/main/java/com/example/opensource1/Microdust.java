@@ -34,9 +34,9 @@ import java.sql.Date;
 
 public class Microdust extends AppCompatActivity {
     TextView pm10, pm25, t1, t2;
+    data input = new data();
 
     String p1 = new String();
-    String p2 = new String();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,70 +50,66 @@ public class Microdust extends AppCompatActivity {
         pm25 = findViewById(R.id.textView2);
         t1 = findViewById(R.id.pm10En);
         t2 = findViewById(R.id.pm25En);
-        p1 = "dd";
+        p1 = "Can't access internet";
         //할당
 
         new Thread((new Runnable() {
             @Override
             public void run() {
                 try {
-                    getAirKor();
+                    getAirKor(input);
                 } catch (IOException /*| JSONException*/ | ParseException e) {
                     e.printStackTrace();
                 }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        pm10.setText(p1);
-                        pm25.setText(p2);
+                        pm10.setText(input.airKorDust_data.pm10val);
+                        pm25.setText(input.airKorDust_data.pm25val);
                     }
                 });
             }
         })).start();
 
-        System.out.println("ee"+p1);
         pm10.setText(p1);
+        pm25.setText(p1);
 
     }
 
-    void getAirKor() throws IOException, ParseException {
-        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty"); //URL
-        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=T%2FL6AKT1fsWyadGE1j3QYFXgSmOWWV375pu6qQxuQ612F22wflZp0Ey%2BdjuPCZ8XeoShMs%2FaOPn3QJfpkbTlTw%3D%3D"); //Service Key
-        urlBuilder.append("&" + URLEncoder.encode("returnType","UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8")); //xml 또는 json
-        urlBuilder.append("&" + URLEncoder.encode("sidoName","UTF-8") + "=" + URLEncoder.encode("서울", "UTF-8")); //통보시간 검색(조회 날짜 입력이 없을 경우 한달동안 예보통보 발령 날짜의 리스트 정보를 확인)
-        urlBuilder.append("&" + URLEncoder.encode("ver","UTF-8") + "=" + URLEncoder.encode("1.0", "UTF-8")); //통보코드검색(PM10, PM25, O3)
+    void getAirKor(data in) throws IOException, ParseException {
+        StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty"); /*URL*/
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=T%2FL6AKT1fsWyadGE1j3QYFXgSmOWWV375pu6qQxuQ612F22wflZp0Ey%2BdjuPCZ8XeoShMs%2FaOPn3QJfpkbTlTw%3D%3D"); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("returnType","UTF-8") + "=" + URLEncoder.encode("JSON", "UTF-8")); /*xml 또는 json*/
+        urlBuilder.append("&" + URLEncoder.encode("sidoName","UTF-8") + "=" + URLEncoder.encode("서울", "UTF-8")); /*통보시간 검색(조회 날짜 입력이 없을 경우 한달동안 예보통보 발령 날짜의 리스트 정보를 확인)*/
+        urlBuilder.append("&" + URLEncoder.encode("ver","UTF-8") + "=" + URLEncoder.encode("1.0", "UTF-8")); /*통보코드검색(PM10, PM25, O3)*/
         URL url = new URL(urlBuilder.toString());
 
 
         BufferedReader bf;
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
         String result = bf.readLine();
-        //파싱이 아직 안됨
-        System.out.println(result);
 
 
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
         JSONObject response = (JSONObject)jsonObject.get("response");
         JSONObject body = (JSONObject)response.get("body");
-        System.out.println("body = " + body);
         JSONObject totalCount = (JSONObject)jsonObject.get("totalCount");
         JSONArray item = (JSONArray)body.get("items");
+
         for (int i = 0; i < item.size(); i++)
         {
             JSONObject items = (JSONObject) item.get(i);
             String str = items.get("stationName").toString();
             String sung = "성동구";
             if(str.equals(sung)){
-                System.out.println(items.get("pm25Value").toString());
-                //pm10.setText(items.get("pm10Value").toString());
-                //pm25.setText(items.get("pm25Value").toString());
-                p1 = items.get("pm10Value").toString();
-                System.out.println("p1: "+p1);
-                p2 = items.get("pm25Value").toString();
+                in.airKorDust_data.setPm10val(items.get("pm10Value").toString());
+                in.airKorDust_data.setStationName(items.get("stationName").toString());
+                in.airKorDust_data.setPm25val(items.get("pm25Value").toString());
 
             }//성동구 미세먼지 할당
+
+
         }
     }
-
 }
