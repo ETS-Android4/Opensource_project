@@ -33,9 +33,8 @@ import java.time.ZoneId;
 import java.sql.Date;
 
 public class Microdust extends AppCompatActivity {
-    TextView pm10, pm25, t1, t2;
+    TextView pm10, pm25;
     data input = new data();
-
     String p1 = new String();
 
     @Override
@@ -48,8 +47,6 @@ public class Microdust extends AppCompatActivity {
 
         pm10 = findViewById(R.id.textView);
         pm25 = findViewById(R.id.textView2);
-        t1 = findViewById(R.id.pm10En);
-        t2 = findViewById(R.id.pm25En);
         p1 = "Can't access internet";
         //할당
 

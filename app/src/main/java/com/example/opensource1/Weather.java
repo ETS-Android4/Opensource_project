@@ -37,7 +37,7 @@ import android.os.Bundle;
 
 public class Weather extends AppCompatActivity {
     data input = new data();
-    TextView nowH, nowC, tvH, tvC;
+    TextView nowH, nowC, tvH, tvC, nowSky;
     NowTime t = new NowTime();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class Weather extends AppCompatActivity {
 
         nowH = findViewById(R.id.nowH);
         nowC = findViewById(R.id.nowC);
+        nowSky = findViewById(R.id.nowSky);
         tvC = findViewById(R.id.nowCtv);
         tvH = findViewById(R.id.nowHtv);
 
@@ -65,6 +66,7 @@ public class Weather extends AppCompatActivity {
                     public void run() {
                         nowC.setText(input.weather_data.t1h);
                         nowH.setText(input.weather_data.reh);
+                        nowSky.setText(input.weather_data.pty);
                     }
                 });
             }

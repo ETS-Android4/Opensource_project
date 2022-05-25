@@ -17,16 +17,15 @@
                 android:id="@+id/chamTreetv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"
+                android:textSize="50sp"
                 android:text="참나무: " />
 
 
-            <TextView
+            <ImageView
                 android:id="@+id/nowChamTree"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:text="참나무" />
+                android:layout_width="200px"
+                android:layout_height="200px"
+                app:srcCompat="@drawable/emoji0" />
         </TableRow>
 
         <TableRow
@@ -38,15 +37,14 @@
                 android:id="@+id/soTreetv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"
+                android:textSize="50sp"
                 android:text="소나무: " />
 
-            <TextView
+            <ImageView
                 android:id="@+id/nowSoTree"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:text="소나무" />
+                android:layout_width="200px"
+                android:layout_height="200px"
+                app:srcCompat="@drawable/emoji0" />
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
@@ -57,15 +55,14 @@
                 android:id="@+id/jabchotv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="30sp"
+                android:textSize="50sp"
                 android:text="잡초: " />
 
-            <TextView
+            <ImageView
                 android:id="@+id/nowJabcho"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:text="잡초" />
+                android:layout_width="200px"
+                android:layout_height="200px"
+                app:srcCompat="@drawable/emoji0" />
         </TableRow>
 
     </TableLayout>

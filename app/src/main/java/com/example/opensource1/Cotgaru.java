@@ -9,6 +9,8 @@ import org.json.simple.JSONObject;
 import android.os.Build;
 import android.os.Bundle;
 import org.json.simple.JSONArray;
+
+import android.widget.ImageView;
 import android.widget.TextView;
 import org.json.JSONException;
 import java.io.BufferedReader;
@@ -36,7 +38,8 @@ import java.sql.Date;
 import android.os.Bundle;
 
 public class Cotgaru extends AppCompatActivity {
-    TextView soTree, jabcho, chamTree, soTreeTv, jabchoTv, chamTreeTv;
+    TextView soTreeTv, jabchoTv, chamTreeTv;
+    ImageView soTree, jabcho, chamTree;
     data input = new data();
     NowTime t = new NowTime();
 
@@ -69,9 +72,57 @@ public class Cotgaru extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        soTree.setText(input.soTree_data.today_val);
-                        jabcho.setText(input.jopcho_data.today_val);
-                        chamTree.setText(input.charmTree_data.today_val);
+                        int x=0;
+                        int y=0;
+                        int z=0;
+                        x = Integer.parseInt(input.soTree_data.today_val);
+                        y = Integer.parseInt(input.jopcho_data.today_val);
+                        z = Integer.parseInt(input.charmTree_data.today_val);
+                        if(x==0){
+                            soTree.setImageResource(R.drawable.emoji0);
+                        }
+                        else if(x==1)
+                        {
+                            soTree.setImageResource(R.drawable.emoji1);
+                        }
+                        else if(x==2)
+                        {
+                            soTree.setImageResource(R.drawable.emoji2);
+                        }
+                        else
+                        {
+                            soTree.setImageResource(R.drawable.emoji3);
+                        }
+                        if(y==0){
+                            jabcho.setImageResource(R.drawable.emoji0);
+                        }
+                        else if(y==1)
+                        {
+                            jabcho.setImageResource(R.drawable.emoji1);
+                        }
+                        else if(y==2)
+                        {
+                            jabcho.setImageResource(R.drawable.emoji2);
+                        }
+                        else
+                        {
+                            jabcho.setImageResource(R.drawable.emoji3);
+                        }
+                        if(z==0){
+                            chamTree.setImageResource(R.drawable.emoji0);
+                        }
+                        else if(z==1)
+                        {
+                            chamTree.setImageResource(R.drawable.emoji1);
+                        }
+                        else if(z==2)
+                        {
+                            chamTree.setImageResource(R.drawable.emoji2);
+                        }
+                        else
+                        {
+                            chamTree.setImageResource(R.drawable.emoji3);
+                        }
                     }
                 });
             }
@@ -95,7 +146,6 @@ public class Cotgaru extends AppCompatActivity {
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
         String result = bf.readLine();
         //파싱이 아직 안됨
-        System.out.println(result);
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
         JSONObject response = (JSONObject)jsonObject.get("response");
@@ -106,7 +156,12 @@ public class Cotgaru extends AppCompatActivity {
         {
             JSONObject item = (JSONObject) itemArr.get(i);
             in.charmTree_data.setDate(item.get("date").toString());
-            in.charmTree_data.setToday_val(item.get("today").toString());
+            if(item.get("today").toString().isEmpty()) {
+
+            }
+            else {
+                in.charmTree_data.setToday_val(item.get("today").toString());
+            }
             in.charmTree_data.setTomorrow_val(item.get("tomorrow").toString());
         }
     }
@@ -131,7 +186,6 @@ public class Cotgaru extends AppCompatActivity {
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
         String result = bf.readLine();
 
-        System.out.println(result);
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
         JSONObject response = (JSONObject)jsonObject.get("response");
@@ -143,8 +197,13 @@ public class Cotgaru extends AppCompatActivity {
             JSONObject item = (JSONObject) itemArr.get(i);
 
             in.soTree_data.setDate(item.get("date").toString());
-            in.soTree_data.setToday_val(item.get("today").toString());
-            System.out.println("aa"+in.soTree_data.today_val);
+            if(item.get("today").toString().isEmpty()) {
+
+            }
+            else
+            {
+                in.soTree_data.setToday_val(item.get("today").toString());
+            }
             in.soTree_data.setTomorrow_val(item.get("tomorrow").toString());
 
         }
@@ -170,7 +229,6 @@ public class Cotgaru extends AppCompatActivity {
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
         String result = bf.readLine();
         //파싱이 아직 안됨
-        System.out.println(result);
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
         JSONObject response = (JSONObject)jsonObject.get("response");
@@ -180,9 +238,14 @@ public class Cotgaru extends AppCompatActivity {
         for (int i = 0; i < itemArr.size(); i++)
         {
             JSONObject item = (JSONObject) itemArr.get(i);
-
             in.jopcho_data.setDate(item.get("date").toString());
-            in.jopcho_data.setToday_val(item.get("today").toString());
+            if(item.get("today").toString().isEmpty()) {
+
+            }
+            else
+            {
+                in.jopcho_data.setToday_val(item.get("today").toString());
+            }
             in.jopcho_data.setTomorrow_val(item.get("tomorrow").toString());
         }
     }

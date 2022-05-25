@@ -53,7 +53,6 @@ public class NowTime {
         this.base_time = new SimpleDateFormat("HH").format(cal.getTime()) +"00";
 
         int time_min = Integer.parseInt(this.hour + this.min);
-        System.out.println("Time int: " + time_min);
         if (time_min < 40)
         {
             cal.setTime(today);
@@ -71,18 +70,6 @@ public class NowTime {
             this.base_time = "2300";
         }
 
-        System.out.println("Base Date: " + this.base_date);
-        System.out.println("Base Time: " + this.base_time);
-
-//        this.year = new SimpleDateFormat("yyyy").format(dateSys);
-//        this.month = new SimpleDateFormat("MM").format(dateSys);
-//        this.day = new SimpleDateFormat("dd").format(dateSys);
-//        this.hour = new SimpleDateFormat("HH").format(dateSys);
-//        this.min = new SimpleDateFormat("mm").format(dateSys);
-//
-//        this.time = new SimpleDateFormat("yyyyMMddHH").format(dateSys);
-//        this.base_time = new SimpleDateFormat("HH").format(dateSys) + "00";
-//        this.base_date = new SimpleDateFormat("yyyyMMdd").format(dateSys);
     }
 
     String getTime() {

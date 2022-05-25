@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import org.json.simple.JSONObject;
 
@@ -45,6 +46,7 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
     TextView tip;
     Button mdbtn, wtbtn, cotbtn, covidbtn, testbtn;
+    ImageView mainImg;
     String[] tipStr = new String[4];
     int x=0;
     int y=0;
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         actionBar.hide();// 액션바 삭제
 
         tip = findViewById(R.id.tipText);
+        mainImg = findViewById(R.id.mainImg);
         mdbtn = findViewById(R.id.mdButton);
         wtbtn = findViewById(R.id.weatherButton);
         covidbtn = findViewById(R.id.covidButton);
@@ -77,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
         long now = System.currentTimeMillis();
         Date dateSys = new Date(now);
         String dateSys_Str = dateSys.toString();
-        //System.out.println(dateSys_Str);
         String year = dateSys_Str.substring(0, 4);
         String month = dateSys_Str.substring(5, 7);
         String day = dateSys_Str.substring(8, 10);
@@ -170,7 +172,37 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //sum = get_sumAll(input);
+                        sum = get_sumAll(input);
+                        int sky;
+                        sky = Integer.parseInt(input.weather_data.pty);
+                        if(sum==0){
+                            mainImg.setImageResource(R.drawable.emoji0);
+                        }
+                        else if(sum==1)
+                        {
+                            mainImg.setImageResource(R.drawable.emoji1);
+                        }
+                        else if(sum==2)
+                        {
+                            mainImg.setImageResource(R.drawable.emoji2);
+                        }
+                        else
+                        {
+                            mainImg.setImageResource(R.drawable.emoji3);
+                        }
+                        if(sky<1)
+                        {
+                            wtbtn.setBackgroundResource(R.drawable.sunny);
+                        }
+                        else if(sky<3)
+                        {
+                            wtbtn.setBackgroundResource(R.drawable.rain);
+                        }
+                        else
+                        {
+                            wtbtn.setBackgroundResource(R.drawable.snow);
+                        }
+
                         testbtn.setText(Integer.toString(x));
                     }
                 });
@@ -187,10 +219,7 @@ public class MainActivity extends AppCompatActivity {
     int get_sumAll(data in){
         int x=0;
         x = x+Integer.parseInt(in.cold_data.today_val);
-        System.out.println("aa"+x);
-        System.out.println("dd"+in.charmTree_data.today_val);
-        //x = x+Integer.parseInt(in.charmTree_data.today_val);
-        System.out.println(x);
+        x = x+Integer.parseInt(in.charmTree_data.today_val);
         x = x+Integer.parseInt(in.jopcho_data.today_val);
         x = x+Integer.parseInt(in.soTree_data.today_val);
         x = x+Integer.parseInt(in.chunsik_data.today_val);
@@ -215,7 +244,6 @@ public class MainActivity extends AppCompatActivity {
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
         String result = bf.readLine();
         //파싱이 아직 안됨
-        System.out.println(result);
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
         JSONObject response = (JSONObject)jsonObject.get("response");
@@ -226,7 +254,12 @@ public class MainActivity extends AppCompatActivity {
         {
             JSONObject item = (JSONObject) itemArr.get(i);
             in.charmTree_data.setDate(item.get("date").toString());
-            in.charmTree_data.setToday_val(item.get("today").toString());
+            if(item.get("today").toString().isEmpty()) {
+
+            }
+            else {
+                in.charmTree_data.setToday_val(item.get("today").toString());
+            }
             in.charmTree_data.setTomorrow_val(item.get("tomorrow").toString());
         }
     }
@@ -251,7 +284,6 @@ public class MainActivity extends AppCompatActivity {
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
         String result = bf.readLine();
 
-        System.out.println(result);
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
         JSONObject response = (JSONObject)jsonObject.get("response");
@@ -263,7 +295,12 @@ public class MainActivity extends AppCompatActivity {
             JSONObject item = (JSONObject) itemArr.get(i);
 
             in.soTree_data.setDate(item.get("date").toString());
-            in.soTree_data.setToday_val(item.get("today").toString());
+            if(item.get("today").toString().isEmpty()) {
+
+            }
+            else {
+                in.soTree_data.setToday_val(item.get("today").toString());
+            }
             in.soTree_data.setTomorrow_val(item.get("tomorrow").toString());
 
         }
@@ -289,7 +326,6 @@ public class MainActivity extends AppCompatActivity {
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
         String result = bf.readLine();
         //파싱이 아직 안됨
-        System.out.println(result);
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
         JSONObject response = (JSONObject)jsonObject.get("response");
@@ -301,7 +337,12 @@ public class MainActivity extends AppCompatActivity {
             JSONObject item = (JSONObject) itemArr.get(i);
 
             in.jopcho_data.setDate(item.get("date").toString());
-            in.jopcho_data.setToday_val(item.get("today").toString());
+            if(item.get("today").toString().isEmpty()) {
+
+            }
+            else {
+                in.jopcho_data.setToday_val(item.get("today").toString());
+            }
             in.jopcho_data.setTomorrow_val(item.get("tomorrow").toString());
         }
     }
@@ -338,7 +379,6 @@ public class MainActivity extends AppCompatActivity {
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
         String result = bf.readLine();
         //파싱이 아직 안됨
-        System.out.println(result);
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
         JSONObject response = (JSONObject)jsonObject.get("response");
@@ -351,10 +391,10 @@ public class MainActivity extends AppCompatActivity {
 
             in.weather_data.setValue(item.get("category").toString(), item.get("obsrValue").toString());
 
-            System.out.println("날짜: " + item.get("baseDate").toString());
+            /*System.out.println("날짜: " + item.get("baseDate").toString());
             System.out.println("기준 시간: " + item.get("baseTime").toString());
             System.out.println("날씨: " + item.get("category").toString());
-            System.out.println("실황 값: " + item.get("obsrValue").toString());
+            System.out.println("실황 값: " + item.get("obsrValue").toString());*/
         }
         in.weather_data.set_dif_temp();
     }
@@ -408,7 +448,6 @@ public class MainActivity extends AppCompatActivity {
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
         String result = bf.readLine();
         //파싱이 아직 안됨
-        System.out.println(result);
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
         JSONObject response = (JSONObject)jsonObject.get("response");
@@ -420,12 +459,13 @@ public class MainActivity extends AppCompatActivity {
             JSONObject item = (JSONObject) itemArr.get(i);
 
             in.chunsik_data.setDate(item.get("date").toString());
-            in.chunsik_data.setToday_val(item.get("today").toString());
-            in.chunsik_data.setTomorrow_val(item.get("tomorrow").toString());
+            if(item.get("today").toString().isEmpty()) {
 
-            //System.out.println("날짜: " + item.get("date").toString());
-            //System.out.println("오늘 위험도: " + item.get("today").toString());
-            //System.out.println("내일 위험도: " + item.get("tomorrow").toString());
+            }
+            else {
+                in.chunsik_data.setToday_val(item.get("today").toString());
+            }
+            in.chunsik_data.setTomorrow_val(item.get("tomorrow").toString());
         }
 
     }
@@ -450,7 +490,6 @@ public class MainActivity extends AppCompatActivity {
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
         String result = bf.readLine();
         //파싱이 아직 안됨
-        System.out.println(result);
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
         JSONObject response = (JSONObject)jsonObject.get("response");
@@ -462,12 +501,13 @@ public class MainActivity extends AppCompatActivity {
             JSONObject item = (JSONObject) itemArr.get(i);
 
             in.cold_data.setDate(item.get("date").toString());
-            in.cold_data.setToday_val(item.get("today").toString());
-            in.cold_data.setTomorrow_val(item.get("tomorrow").toString());
+            if(item.get("today").toString().isEmpty()) {
 
-            //System.out.println("날짜: " + item.get("date").toString());
-            //System.out.println("오늘 위험도: " + item.get("today").toString());
-            //System.out.println("내일 위험도: " + item.get("tomorrow").toString());
+            }
+            else {
+                in.cold_data.setToday_val(item.get("today").toString());
+            }
+            in.cold_data.setTomorrow_val(item.get("tomorrow").toString());
         }
 
     }
