@@ -36,7 +36,7 @@ import java.sql.Date;
 import android.os.Bundle;
 
 public class Cotgaru extends AppCompatActivity {
-    TextView soTree, chunsik, soTreeTv, chunsikTv;
+    TextView soTree, jabcho, chamTree, soTreeTv, jabchoTv, chamTreeTv;
     data input = new data();
     NowTime t = new NowTime();
 
@@ -49,17 +49,20 @@ public class Cotgaru extends AppCompatActivity {
         actionBar.hide();// 액션바 삭제
 
         soTree = findViewById(R.id.nowSoTree);
-        chunsik = findViewById(R.id.nowChunsik);
+        jabcho = findViewById(R.id.nowJabcho);
+        chamTree = findViewById(R.id.nowChamTree);
         soTreeTv = findViewById(R.id.soTreetv);
-        chunsikTv = findViewById(R.id.chunsiktv);
+        jabchoTv = findViewById(R.id.jabchotv);
+        chamTreeTv = findViewById(R.id.chamTreetv);
 
 
         new Thread((new Runnable() {
             @Override
             public void run() {
                 try {
-                    get_Allergy_Chunsik(input);
+                    get_Allergy_charmTree(input);
                     get_Allergy_SoTree(input);
+                    get_Allergy_Jopcho(input);
                 } catch (IOException /*| JSONException*/ | ParseException e) {
                     e.printStackTrace();
                 }
@@ -67,7 +70,8 @@ public class Cotgaru extends AppCompatActivity {
                     @Override
                     public void run() {
                         soTree.setText(input.soTree_data.today_val);
-                        chunsik.setText(input.chunsik_data.today_val);
+                        jabcho.setText(input.jopcho_data.today_val);
+                        chamTree.setText(input.charmTree_data.today_val);
                     }
                 });
             }
@@ -98,9 +102,6 @@ public class Cotgaru extends AppCompatActivity {
             in.charmTree_data.setDate(item.get("date").toString());
             in.charmTree_data.setToday_val(item.get("today").toString());
             in.charmTree_data.setTomorrow_val(item.get("tomorrow").toString());
-            //System.out.println("날짜: " + item.get("date").toString());
-            //System.out.println("오늘 위험도: " + item.get("today").toString());
-            //System.out.println("내일 위험도: " + item.get("tomorrow").toString());
         }
     }
 
@@ -133,9 +134,6 @@ public class Cotgaru extends AppCompatActivity {
             in.soTree_data.setToday_val(item.get("today").toString());
             in.soTree_data.setTomorrow_val(item.get("tomorrow").toString());
 
-            //System.out.println("날짜: " + item.get("date").toString());
-            //System.out.println("오늘 위험도: " + item.get("today").toString());
-            //System.out.println("내일 위험도: " + item.get("tomorrow").toString());
         }
     }
 
@@ -168,9 +166,6 @@ public class Cotgaru extends AppCompatActivity {
             in.jopcho_data.setToday_val(item.get("today").toString());
             in.jopcho_data.setTomorrow_val(item.get("tomorrow").toString());
 
-            //System.out.println("날짜: " + item.get("date").toString());
-            //System.out.println("오늘 위험도: " + item.get("today").toString());
-            //System.out.println("내일 위험도: " + item.get("tomorrow").toString());
         }
     }
 

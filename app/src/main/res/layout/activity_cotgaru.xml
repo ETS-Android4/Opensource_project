@@ -14,19 +14,19 @@
             android:layout_margin="10dp">
 
             <TextView
-                android:id="@+id/chunsiktv"
+                android:id="@+id/chamTreetv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
-                android:text="천식: " />
+                android:text="참나무: " />
 
 
             <TextView
-                android:id="@+id/nowChunsik"
+                android:id="@+id/nowChamTree"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
-                android:text="천식" />
+                android:text="참나무" />
         </TableRow>
 
         <TableRow
@@ -47,6 +47,25 @@
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
                 android:text="소나무" />
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/jabchotv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:text="잡초: " />
+
+            <TextView
+                android:id="@+id/nowJabcho"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:text="잡초" />
         </TableRow>
 
     </TableLayout>
