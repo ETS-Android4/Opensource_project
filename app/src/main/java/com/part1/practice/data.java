@@ -7,6 +7,8 @@ public class data {
     charmTree charmTree_data;
     jopcho jopcho_data;
     weather weather_data;
+    cold cold_data;
+    String testStr = new String("teststr");
 
     data(){
         airKorDust_data = new air_kor_dust();
@@ -15,6 +17,7 @@ public class data {
         charmTree_data = new charmTree();
         jopcho_data = new jopcho();
         weather_data = new weather();
+        cold_data = new cold();
     }
 
     public class air_kor_dust {
@@ -23,6 +26,16 @@ public class data {
         String stationName;
         String pm25val;
         String pm10val;
+        String pm25Grade1h;
+        String pm10Grade1h;
+
+        public void setPm25Grade1h(String pm25Grade1h) {
+            this.pm25Grade1h = pm25Grade1h;
+        }
+        public void setPm10Grade1h(String pm10Grade1h) {
+            this.pm10Grade1h = pm10Grade1h;
+        }
+
 
         public void setSidoName(String sidoName) {
             this.sidoName = sidoName;
@@ -40,8 +53,8 @@ public class data {
 
     public class chunsik {
         String date;
-        String today_val;
-        String tomorrow_val;
+        String today_val = new String("0");
+        String tomorrow_val = new String("0");
 
         public void setDate(String date) {
             this.date = date;
@@ -57,8 +70,14 @@ public class data {
     //각 알러지 데이터는 위험도가 0 1 2 3 으로 0이 낮음 1이 보통 2가 높음 3이 매우높음임
     public class soTree {
         String date;
-        String today_val;
-        String tomorrow_val;
+        String today_val = new String("0");
+        String tomorrow_val = new String("0");
+        public boolean checkValid(NowTime t){
+            int month_int = Integer.parseInt(t.getMonth());
+            if (month_int < 4 || month_int > 6)
+                return false;
+            return true;
+        }
 
         public void setDate(String date) {
             this.date = date;
@@ -73,9 +92,14 @@ public class data {
 
     public class charmTree {
         String date;
-        String today_val;
-        String tomorrow_val;
-
+        String today_val = new String("0");
+        String tomorrow_val = new String("0");
+        public boolean checkValid(NowTime t){
+            int month_int = Integer.parseInt(t.getMonth());
+            if (month_int < 4 || month_int > 6)
+                return false;
+            return true;
+        }
         public void setDate(String date) {
             this.date = date;
         }
@@ -89,8 +113,36 @@ public class data {
 
     public class jopcho {
         String date;
-        String today_val;
-        String tomorrow_val;
+        String today_val = new String("0");
+        String tomorrow_val = new String("0");
+        public boolean checkValid(NowTime t){
+            int month_int = Integer.parseInt(t.getMonth());
+            if (month_int < 8 || month_int > 10)
+                return false;
+            return true;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+        public void setToday_val(String today_val) {
+            this.today_val = today_val;
+        }
+        public void setTomorrow_val(String tomorrow_val) {
+            this.tomorrow_val = tomorrow_val;
+        }
+    }
+    public class cold {
+        String date;
+        String today_val = new String("0");
+        String tomorrow_val = new String("0");
+
+        public boolean checkValid(NowTime t){
+            int month_int = Integer.parseInt(t.getMonth());
+            if (month_int < 9 && month_int > 4)
+                return false;
+            return true;
+        }
 
         public void setDate(String date) {
             this.date = date;
@@ -113,7 +165,7 @@ public class data {
         REH 습도 % 단위
         SNO 1시간 적설량 cm 단위
         SKY 하늘상태 코드값 0 ~ 5 맑음 6 ~ 8 구름많음 9~10 흐림
-        TMP 1시간 기온
+        T1H 1시간 기온
         TMN 일 최저 기온
         TMX 일 최고 기온
          */
@@ -124,7 +176,7 @@ public class data {
         String reh = "-1";
         String sno = "-1";
         String sky = "-1";
-        String tmp = "-1";
+        String t1h = "-1";
         String tmn = "-1";
         String tmx = "-1";
         String dif_temp = "-1";
@@ -157,8 +209,8 @@ public class data {
                 case "SKY":
                     sky = val;
                     break;
-                case "TMP":
-                    tmp = val;
+                case "T1H":
+                    t1h = val;
                     break;
                 default: break;
             }
