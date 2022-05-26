@@ -26,7 +26,15 @@ public class data {
         String stationName;
         String pm25val;
         String pm10val;
+        String pm25Grade1h;
+        String pm10Grade1h;
 
+        public void setPm25Grade1h(String pm25Grade1h) {
+            this.pm25Grade1h = pm25Grade1h;
+        }
+        public void setPm10Grade1h(String pm10Grade1h) {
+            this.pm10Grade1h = pm10Grade1h;
+        }
         public void setSidoName(String sidoName) {
             this.sidoName = sidoName;
         }

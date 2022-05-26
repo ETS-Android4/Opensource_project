@@ -62,6 +62,7 @@ public class Microdust extends AppCompatActivity {
                     @Override
                     public void run() {
                         pm10.setText(input.airKorDust_data.pm10val);
+                        System.out.println(input.airKorDust_data.pm10val);
                         pm25.setText(input.airKorDust_data.pm25val);
                     }
                 });
@@ -94,19 +95,52 @@ public class Microdust extends AppCompatActivity {
         JSONObject totalCount = (JSONObject)jsonObject.get("totalCount");
         JSONArray item = (JSONArray)body.get("items");
 
-        for (int i = 0; i < item.size(); i++)
-        {
+        for (int i = 0; i < item.size(); i++) {
             JSONObject items = (JSONObject) item.get(i);
             String str = items.get("stationName").toString();
             String sung = "성동구";
-            if(str.equals(sung)){
+            if (str.equals(sung)) {
+                int p1, p2;
                 in.airKorDust_data.setPm10val(items.get("pm10Value").toString());
                 in.airKorDust_data.setStationName(items.get("stationName").toString());
                 in.airKorDust_data.setPm25val(items.get("pm25Value").toString());
+                p1 = Integer.parseInt(in.airKorDust_data.pm10val);
+                p2 = Integer.parseInt(in.airKorDust_data.pm25val);
+                if(p1<31)
+                {
+                    in.airKorDust_data.setPm10Grade1h("0");
+                }
+                else if(p1<81)
+                {
+                    in.airKorDust_data.setPm10Grade1h("1");
+                }
+                else if(p1<151)
+                {
+                    in.airKorDust_data.setPm10Grade1h("2");
+                }
+                else
+                {
+                    in.airKorDust_data.setPm10Grade1h("3");
+                }
+                if (p2 < 15)
+                {
+                    in.airKorDust_data.setPm25Grade1h("0");
+                }
+                else if(p1<51)
+                {
+                    in.airKorDust_data.setPm25Grade1h("1");
+                }
+                else if(p1<101)
+                {
+                    in.airKorDust_data.setPm25Grade1h("2");
+                }
+                else
+                {
+                    in.airKorDust_data.setPm25Grade1h("3");
+                }
+
 
             }//성동구 미세먼지 할당
-
-
         }
     }
 }

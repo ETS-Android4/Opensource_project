@@ -78,6 +78,7 @@
                 android:layout_height="90dp"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
+                android:background="@drawable/dust0"
                 android:text="미세먼지"
                 android:textSize="24sp" />
         </TableRow>

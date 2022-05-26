@@ -173,8 +173,9 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         sum = get_sumAll(input);
-                        int sky;
+                        int sky, dust;
                         sky = Integer.parseInt(input.weather_data.pty);
+                        dust = Integer.parseInt(input.airKorDust_data.pm10Grade1h);
                         if(sum==0){
                             mainImg.setImageResource(R.drawable.emoji0);
                         }
@@ -202,6 +203,21 @@ public class MainActivity extends AppCompatActivity {
                         {
                             wtbtn.setBackgroundResource(R.drawable.snow);
                         }
+                        if(dust==0){
+                            mdbtn.setBackgroundResource(R.drawable.dust0);
+                        }
+                        else if(dust==1)
+                        {
+                            mdbtn.setBackgroundResource(R.drawable.dust1);
+                        }
+                        else if(dust==2)
+                        {
+                            mdbtn.setBackgroundResource(R.drawable.dust2);
+                        }
+                        else
+                        {
+                            mdbtn.setBackgroundResource(R.drawable.dust3);
+                        }
 
                         testbtn.setText(Integer.toString(x));
                     }
@@ -223,7 +239,10 @@ public class MainActivity extends AppCompatActivity {
         x = x+Integer.parseInt(in.jopcho_data.today_val);
         x = x+Integer.parseInt(in.soTree_data.today_val);
         x = x+Integer.parseInt(in.chunsik_data.today_val);
-        x = x/5;
+        System.out.println("dddd"+in.airKorDust_data.pm10Grade1h);
+        x = x+Integer.parseInt(in.airKorDust_data.pm10Grade1h);
+        x = x+Integer.parseInt(in.airKorDust_data.pm25Grade1h);
+        x = x/7;
         return x;
     }
     void get_Allergy_charmTree(data in) throws IOException, ParseException {
@@ -390,11 +409,6 @@ public class MainActivity extends AppCompatActivity {
             JSONObject item = (JSONObject) itemArr.get(i);
 
             in.weather_data.setValue(item.get("category").toString(), item.get("obsrValue").toString());
-
-            /*System.out.println("날짜: " + item.get("baseDate").toString());
-            System.out.println("기준 시간: " + item.get("baseTime").toString());
-            System.out.println("날씨: " + item.get("category").toString());
-            System.out.println("실황 값: " + item.get("obsrValue").toString());*/
         }
         in.weather_data.set_dif_temp();
     }
@@ -425,9 +439,46 @@ public class MainActivity extends AppCompatActivity {
             String str = items.get("stationName").toString();
             String sung = "성동구";
             if(str.equals(sung)){
+                int p1, p2;
+
                 in.airKorDust_data.setPm10val(items.get("pm10Value").toString());
                 in.airKorDust_data.setStationName(items.get("stationName").toString());
                 in.airKorDust_data.setPm25val(items.get("pm25Value").toString());
+                p1 = Integer.parseInt(in.airKorDust_data.pm10val);
+                p2 = Integer.parseInt(in.airKorDust_data.pm25val);
+                System.out.println(p1);
+                if(p1<31)
+                {
+                    in.airKorDust_data.setPm10Grade1h("0");
+                }
+                else if(p1<81)
+                {
+                    in.airKorDust_data.setPm10Grade1h("1");
+                }
+                else if(p1<151)
+                {
+                    in.airKorDust_data.setPm10Grade1h("2");
+                }
+                else
+                {
+                    in.airKorDust_data.setPm10Grade1h("3");
+                }
+                if (p2 < 15)
+                {
+                    in.airKorDust_data.setPm25Grade1h("0");
+                }
+                else if(p1<51)
+                {
+                    in.airKorDust_data.setPm25Grade1h("1");
+                }
+                else if(p1<101)
+                {
+                    in.airKorDust_data.setPm25Grade1h("2");
+                }
+                else
+                {
+                    in.airKorDust_data.setPm25Grade1h("3");
+                }
 
             }//성동구 미세먼지 할당
 
