@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.json.simple.JSONObject;
 
@@ -45,9 +46,10 @@ import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     TextView tip;
-    Button mdbtn, wtbtn, cotbtn, covidbtn, testbtn;
+    LinearLayout back;
+    Button mdbtn, wtbtn, cotbtn, covidbtn;
     ImageView mainImg;
-    String[] tipStr = new String[4];
+    String[] tipStr = new String[7];
     int x=0;
     int y=0;
     int sum = 0;
@@ -64,17 +66,13 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();// 액션바 삭제
 
+        back = findViewById(R.id.back);
         tip = findViewById(R.id.tipText);
         mainImg = findViewById(R.id.mainImg);
         mdbtn = findViewById(R.id.mdButton);
         wtbtn = findViewById(R.id.weatherButton);
         covidbtn = findViewById(R.id.covidButton);
         cotbtn = findViewById(R.id.cotButton);
-        testbtn = findViewById(R.id.testButton);
-        tipStr[0] = "1번 팁";
-        tipStr[1] = "2번 팁";
-        tipStr[2] = "3번 팁";
-        tipStr[3] = "4번 팁";
         timer = new Timer();
 
         long now = System.currentTimeMillis();
@@ -86,18 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         // 할당
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                changeTip(y);
-                if(y==3) {
-                    y = -1;
-                }
-                y++;
-            }
 
-        };
-        timer.schedule(timerTask,1000,1000);
 
         mdbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,29 +118,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        testbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                x++;
-                if(x==1){
-                    changeTip(0);
-                }
-                else if(x==2)
-                {
-                    changeTip(1);
-                }
-                else if(x==3)
-                {
-                    changeTip(2);
-                }
-                else
-                {
-                    changeTip(3);
-                    x=0;
-                }
-
-            }
-        });
         new Thread((new Runnable() {
             @Override
             public void run() {
@@ -194,14 +158,18 @@ public class MainActivity extends AppCompatActivity {
                         if(sky<1)
                         {
                             wtbtn.setBackgroundResource(R.drawable.sunny);
+                            back.setBackgroundResource(R.drawable.background_sunny);
                         }
-                        else if(sky<3)
+                        else if(sky==3||sky==7)
                         {
-                            wtbtn.setBackgroundResource(R.drawable.rain);
+                            back.setBackgroundResource(R.drawable.background_snow);
+                            wtbtn.setBackgroundResource(R.drawable.snow);
+
                         }
                         else
                         {
-                            wtbtn.setBackgroundResource(R.drawable.snow);
+                            back.setBackgroundResource(R.drawable.background_rain);
+                            wtbtn.setBackgroundResource(R.drawable.rain);
                         }
                         if(dust==0){
                             mdbtn.setBackgroundResource(R.drawable.dust0);
@@ -218,32 +186,93 @@ public class MainActivity extends AppCompatActivity {
                         {
                             mdbtn.setBackgroundResource(R.drawable.dust3);
                         }
-
-                        testbtn.setText(Integer.toString(x));
                     }
+
                 });
             }
         })).start();
+        timerTask = new TimerTask() {
+            int max = x;
+            @Override
+            public void run() {
+                changeTip(y);
+                if(y==x) {
+                    y = -1;
+                }
+                y++;
+            }
+
+        };
+        timer.schedule(timerTask,1000,1000);
         //함수 구현 부분
 
     }
 
-    private void changeTip(int x){
-        tip.setText(tipStr[x]);
+    private void changeTip(int m){
+        tip.setText(tipStr[m]);
         //t.cancel();
     }
     int get_sumAll(data in){
-        int x=0;
-        x = x+Integer.parseInt(in.cold_data.today_val);
-        x = x+Integer.parseInt(in.charmTree_data.today_val);
-        x = x+Integer.parseInt(in.jopcho_data.today_val);
-        x = x+Integer.parseInt(in.soTree_data.today_val);
-        x = x+Integer.parseInt(in.chunsik_data.today_val);
-        System.out.println("dddd"+in.airKorDust_data.pm10Grade1h);
-        x = x+Integer.parseInt(in.airKorDust_data.pm10Grade1h);
-        x = x+Integer.parseInt(in.airKorDust_data.pm25Grade1h);
-        x = x/7;
-        return x;
+        int i=0;
+        i = i+Integer.parseInt(in.cold_data.today_val);
+        i = i+Integer.parseInt(in.charmTree_data.today_val);
+        i = i+Integer.parseInt(in.jopcho_data.today_val);
+        i = i+Integer.parseInt(in.soTree_data.today_val);
+        i = i+Integer.parseInt(in.chunsik_data.today_val);
+        i = i+Integer.parseInt(in.airKorDust_data.pm10Grade1h);
+        i = i+Integer.parseInt(in.airKorDust_data.pm25Grade1h);
+        i = i/7;
+        if((Integer.parseInt(in.cold_data.today_val)>1))
+        {
+            tipStr[x] = String.valueOf(R.string.cold_bad);
+            x++;
+        }
+        if((Integer.parseInt(in.charmTree_data.today_val)>1))
+        {
+            tipStr[x] = String.valueOf(R.string.chamtree_bad);
+            x++;
+        }
+        if((Integer.parseInt(in.jopcho_data.today_val)>1))
+        {
+            tipStr[x] = String.valueOf(R.string.jabcho_bad);
+            x++;
+        }
+        if((Integer.parseInt(in.soTree_data.today_val)>1))
+        {
+            tipStr[x] = String.valueOf(R.string.sotree_bad);
+            x++;
+        }
+        if((Integer.parseInt(in.chunsik_data.today_val)>1))
+        {
+            tipStr[x] = String.valueOf(R.string.chunsik_bad);
+            x++;
+        }
+        if((Integer.parseInt(in.airKorDust_data.pm10Grade1h)>1))
+        {
+            tipStr[x] = String.valueOf(R.string.md_bad);
+            x++;
+        }
+        if((Integer.parseInt(in.weather_data.pty))==0)
+        {
+
+        }
+        else if((Integer.parseInt(in.weather_data.pty))==4||(Integer.parseInt(in.weather_data.pty))==7)
+        {
+            tipStr[x] = String.valueOf(R.string.is_snowing);
+            x++;
+        }
+        else
+        {
+            tipStr[x] = String.valueOf(R.string.is_raining);
+            x++;
+        }
+        if(x==0)
+        {
+            tipStr[x] = "오늘 날씨는 좋아요";
+            x++;
+        }
+
+        return i;
     }
     void get_Allergy_charmTree(data in) throws IOException, ParseException {
         if (!in.charmTree_data.checkValid(t))
