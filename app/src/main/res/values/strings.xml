@@ -8,4 +8,7 @@
     <string name="jabcho_bad">잡초 알레르기 주의하세요</string>
     <string name="chunsik_bad">천식지수가 나쁘니 주의하세요</string>
     <string name="cold_bad">감기지수가 나쁘니 주의하세요</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 </resources>
