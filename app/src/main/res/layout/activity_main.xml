@@ -52,6 +52,7 @@
 
             <Button
                 android:id="@+id/covidButton"
+                android:background="@drawable/hohubgi"
                 android:layout_width="0dp"
                 android:layout_height="90dp"
                 android:layout_margin="10dp"

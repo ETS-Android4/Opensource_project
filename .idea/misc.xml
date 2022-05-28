@@ -3,12 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/sh/AndroidStudioProjects/Opensource1/app/src/main/res/drawable/ic_main_background.xml" value="0.3165" />
+        <entry key="..\:/Users/sh/AndroidStudioProjects/Opensource1/app/src/main/res/drawable/ic_main_foreground.xml" value="0.3165" />
         <entry key="..\:/Users/sh/AndroidStudioProjects/Opensource1/app/src/main/res/layout/activity_cotgaru.xml" value="0.4192708333333333" />
         <entry key="..\:/Users/sh/AndroidStudioProjects/Opensource1/app/src/main/res/layout/activity_covid.xml" value="0.31302083333333336" />
         <entry key="..\:/Users/sh/AndroidStudioProjects/Opensource1/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Users/sh/AndroidStudioProjects/Opensource1/app/src/main/res/layout/activity_microdust.xml" value="0.3004694835680751" />
-        <entry key="..\:/Users/sh/AndroidStudioProjects/Opensource1/app/src/main/res/layout/activity_weather.xml" value="0.5536458333333333" />
+        <entry key="..\:/Users/sh/AndroidStudioProjects/Opensource1/app/src/main/res/layout/activity_weather.xml" value="0.27350427350427353" />
         <entry key="..\:/Users/sh/AndroidStudioProjects/Opensource1/app/src/main/res/layout/new_app_widget.xml" value="0.31302083333333336" />
+        <entry key="..\:/Users/sh/AndroidStudioProjects/Opensource1/app/src/main/res/mipmap-anydpi-v26/ic_main.xml" value="0.3165" />
+        <entry key="..\:/Users/sh/AndroidStudioProjects/Opensource1/app/src/main/res/mipmap-anydpi-v26/ic_main_round.xml" value="0.3165" />
       </map>
     </option>
   </component>

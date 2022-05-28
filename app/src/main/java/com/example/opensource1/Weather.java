@@ -64,9 +64,22 @@ public class Weather extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        int k;
+                        k = Integer.parseInt(input.weather_data.pty);
                         nowC.setText(input.weather_data.t1h);
                         nowH.setText(input.weather_data.reh);
-                        nowSky.setText(input.weather_data.pty);
+                        if(k<1)
+                        {
+                            nowSky.setText("맑음");
+                        }
+                        else if(k==3||k==7)
+                        {
+                            nowSky.setText("눈");
+                        }
+                        else
+                        {
+                            nowSky.setText("비");
+                        }
                     }
                 });
             }

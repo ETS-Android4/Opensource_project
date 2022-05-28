@@ -57,7 +57,7 @@ public class NewAppWidget extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
 
         //views.setTextViewText(R.id.appwidget_text, widgetText);
-        views.setImageViewResource(R.id.appwidget_image, R.drawable.rain);
+        views.setImageViewResource(R.id.appwidget_image, R.drawable.emoji0);
         long now = System.currentTimeMillis();
         Date dateSys = new Date(now);
         String dateSys_Str = dateSys.toString();
@@ -131,7 +131,7 @@ public class NewAppWidget extends AppWidgetProvider {
         i = i+Integer.parseInt(in.chunsik_data.today_val);
         i = i+Integer.parseInt(in.airKorDust_data.pm10Grade1h);
         i = i+Integer.parseInt(in.airKorDust_data.pm25Grade1h);
-        i = i/7;
+        i = i/4;
         return i;
     }
     static void get_Allergy_charmTree(data in) throws IOException, ParseException {

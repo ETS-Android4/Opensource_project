@@ -2,45 +2,23 @@ package com.example.opensource1;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.json.simple.JSONObject;
-
-import android.os.Build;
 import org.json.simple.JSONArray;
-import org.json.JSONException;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.json.simple.parser.JSONParser;
-
-import org.json.JSONException;
 import org.json.simple.parser.ParseException;
-import org.w3c.dom.Text;
-
-import java.time.ZoneId;
-
-import java.sql.Date;
-
-import org.w3c.dom.Text;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,13 +28,90 @@ public class MainActivity extends AppCompatActivity {
     Button mdbtn, wtbtn, cotbtn, covidbtn;
     ImageView mainImg;
     String[] tipStr = new String[7];
-    int x=0;
+
     int y=0;
+    int tip_num = 0;
     int sum = 0;
+    int sky, dust;
     data input = new data();
     NowTime t = new NowTime();
     Timer timer;
     TimerTask timerTask;
+    Thread setui = new Thread((new Runnable() {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if((sum/4)==0){
+                        mainImg.setImageResource(R.drawable.emoji0);
+                    }
+                    else if((sum/4)==1)
+                    {
+                        mainImg.setImageResource(R.drawable.emoji1);
+                    }
+                    else if((sum/4)==2)
+                    {
+                        mainImg.setImageResource(R.drawable.emoji2);
+                    }
+                    else
+                    {
+                        mainImg.setImageResource(R.drawable.emoji3);
+                    }
+                    if(sky<1)
+                    {
+                        wtbtn.setBackgroundResource(R.drawable.sunny);
+                        back.setBackgroundResource(R.drawable.background_sunny);
+                    }
+                    else if(sky==3||sky==7)
+                    {
+                        back.setBackgroundResource(R.drawable.background_snow);
+                        wtbtn.setBackgroundResource(R.drawable.snow);
+
+                    }
+                    else
+                    {
+                        back.setBackgroundResource(R.drawable.background_rain);
+                        wtbtn.setBackgroundResource(R.drawable.rain);
+                    }
+                    if(dust==0){
+                        mdbtn.setBackgroundResource(R.drawable.dust0);
+                    }
+                    else if(dust==1)
+                    {
+                        mdbtn.setBackgroundResource(R.drawable.dust1);
+                    }
+                    else if(dust==2)
+                    {
+                        mdbtn.setBackgroundResource(R.drawable.dust2);
+                    }
+                    else
+                    {
+                        mdbtn.setBackgroundResource(R.drawable.dust3);
+                    }
+                }
+
+            });
+        }
+    }));
+
+    class getAPI extends Thread {
+        @Override
+        public void run() {
+            super.run();
+
+        }
+    }
+
+    class SetUI extends Thread {
+
+        @Override
+        public void run() {
+            super.run();
+        }
+
+    }
+
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,18 +129,6 @@ public class MainActivity extends AppCompatActivity {
         covidbtn = findViewById(R.id.covidButton);
         cotbtn = findViewById(R.id.cotButton);
         timer = new Timer();
-
-        long now = System.currentTimeMillis();
-        Date dateSys = new Date(now);
-        String dateSys_Str = dateSys.toString();
-        String year = dateSys_Str.substring(0, 4);
-        String month = dateSys_Str.substring(5, 7);
-        String day = dateSys_Str.substring(8, 10);
-
-
-        // 할당
-
-
         mdbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,6 +161,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //new getAPI().start();
+
         new Thread((new Runnable() {
             @Override
             public void run() {
@@ -129,25 +174,20 @@ public class MainActivity extends AppCompatActivity {
                     getAirKor(input);
                     get_cold(input);
                     get_Allergy_Chunsik(input);
-
                 } catch (IOException /*| JSONException*/ | ParseException e) {
                     e.printStackTrace();
                 }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        sum = get_sumAll(input);
-                        int sky, dust;
-                        sky = Integer.parseInt(input.weather_data.pty);
-                        dust = Integer.parseInt(input.airKorDust_data.pm10Grade1h);
-                        if(sum==0){
+                        if((sum/4)==0){
                             mainImg.setImageResource(R.drawable.emoji0);
                         }
-                        else if(sum==1)
+                        else if((sum/4)==1)
                         {
                             mainImg.setImageResource(R.drawable.emoji1);
                         }
-                        else if(sum==2)
+                        else if((sum/4)==2)
                         {
                             mainImg.setImageResource(R.drawable.emoji2);
                         }
@@ -187,92 +227,24 @@ public class MainActivity extends AppCompatActivity {
                             mdbtn.setBackgroundResource(R.drawable.dust3);
                         }
                     }
-
                 });
             }
         })).start();
         timerTask = new TimerTask() {
-            int max = x;
             @Override
             public void run() {
-                changeTip(y);
-                if(y==x) {
+                if(tip_num==0)
+                    tipStr[tip_num++] = "오늘 날씨는 좋아요";
+                tip.setText(tipStr[y]);
+                if(y==tip_num) {
                     y = -1;
                 }
                 y++;
+                if (setui.getState() == Thread.State.NEW)
+                    setui.start();
             }
-
         };
         timer.schedule(timerTask,1000,1000);
-        //함수 구현 부분
-
-    }
-
-    private void changeTip(int m){
-        tip.setText(tipStr[m]);
-        //t.cancel();
-    }
-    int get_sumAll(data in){
-        int i=0;
-        i = i+Integer.parseInt(in.cold_data.today_val);
-        i = i+Integer.parseInt(in.charmTree_data.today_val);
-        i = i+Integer.parseInt(in.jopcho_data.today_val);
-        i = i+Integer.parseInt(in.soTree_data.today_val);
-        i = i+Integer.parseInt(in.chunsik_data.today_val);
-        i = i+Integer.parseInt(in.airKorDust_data.pm10Grade1h);
-        i = i+Integer.parseInt(in.airKorDust_data.pm25Grade1h);
-        i = i/7;
-        if((Integer.parseInt(in.cold_data.today_val)>1))
-        {
-            tipStr[x] = String.valueOf(R.string.cold_bad);
-            x++;
-        }
-        if((Integer.parseInt(in.charmTree_data.today_val)>1))
-        {
-            tipStr[x] = String.valueOf(R.string.chamtree_bad);
-            x++;
-        }
-        if((Integer.parseInt(in.jopcho_data.today_val)>1))
-        {
-            tipStr[x] = String.valueOf(R.string.jabcho_bad);
-            x++;
-        }
-        if((Integer.parseInt(in.soTree_data.today_val)>1))
-        {
-            tipStr[x] = String.valueOf(R.string.sotree_bad);
-            x++;
-        }
-        if((Integer.parseInt(in.chunsik_data.today_val)>1))
-        {
-            tipStr[x] = String.valueOf(R.string.chunsik_bad);
-            x++;
-        }
-        if((Integer.parseInt(in.airKorDust_data.pm10Grade1h)>1))
-        {
-            tipStr[x] = String.valueOf(R.string.md_bad);
-            x++;
-        }
-        if((Integer.parseInt(in.weather_data.pty))==0)
-        {
-
-        }
-        else if((Integer.parseInt(in.weather_data.pty))==4||(Integer.parseInt(in.weather_data.pty))==7)
-        {
-            tipStr[x] = String.valueOf(R.string.is_snowing);
-            x++;
-        }
-        else
-        {
-            tipStr[x] = String.valueOf(R.string.is_raining);
-            x++;
-        }
-        if(x==0)
-        {
-            tipStr[x] = "오늘 날씨는 좋아요";
-            x++;
-        }
-
-        return i;
     }
     void get_Allergy_charmTree(data in) throws IOException, ParseException {
         if (!in.charmTree_data.checkValid(t))
@@ -302,15 +274,15 @@ public class MainActivity extends AppCompatActivity {
         {
             JSONObject item = (JSONObject) itemArr.get(i);
             in.charmTree_data.setDate(item.get("date").toString());
-            if(item.get("today").toString().isEmpty()) {
-
-            }
-            else {
+            if(!item.get("today").toString().isEmpty())
                 in.charmTree_data.setToday_val(item.get("today").toString());
-            }
             in.charmTree_data.setTomorrow_val(item.get("tomorrow").toString());
         }
+        sum += Integer.parseInt(in.charmTree_data.today_val);
+        if((Integer.parseInt(in.charmTree_data.today_val)>1))
+            tipStr[tip_num++] = String.valueOf(R.string.chamtree_bad);
     }
+
 
     void get_Allergy_SoTree(data in) throws IOException, ParseException {
         if (!in.soTree_data.checkValid(t))
@@ -350,9 +322,13 @@ public class MainActivity extends AppCompatActivity {
                 in.soTree_data.setToday_val(item.get("today").toString());
             }
             in.soTree_data.setTomorrow_val(item.get("tomorrow").toString());
-
         }
+        sum += Integer.parseInt(in.soTree_data.today_val);
+        if((Integer.parseInt(in.soTree_data.today_val)>1))
+            tipStr[tip_num++] = String.valueOf(R.string.sotree_bad);
+        System.out.println("소나무끝");
     }
+
 
     void get_Allergy_Jopcho(data in) throws IOException, ParseException {
         if (!in.jopcho_data.checkValid(t))
@@ -385,15 +361,19 @@ public class MainActivity extends AppCompatActivity {
             JSONObject item = (JSONObject) itemArr.get(i);
 
             in.jopcho_data.setDate(item.get("date").toString());
-            if(item.get("today").toString().isEmpty()) {
-
-            }
-            else {
+            if(!item.get("today").toString().isEmpty())
                 in.jopcho_data.setToday_val(item.get("today").toString());
-            }
             in.jopcho_data.setTomorrow_val(item.get("tomorrow").toString());
         }
+        sum += Integer.parseInt(in.jopcho_data.today_val);
+        if((Integer.parseInt(in.jopcho_data.today_val)>1))
+        {
+            tipStr[tip_num++] = String.valueOf(R.string.jabcho_bad);
+        }
+        System.out.println("잡초끝");
     }
+
+
     void getWeather(data in) throws IOException, ParseException {
         //초단기 실황 조회
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst"); /*URL*/
@@ -440,7 +420,17 @@ public class MainActivity extends AppCompatActivity {
             in.weather_data.setValue(item.get("category").toString(), item.get("obsrValue").toString());
         }
         in.weather_data.set_dif_temp();
+        if((Integer.parseInt(in.weather_data.pty))==0) {tipStr[tip_num++] = String.valueOf("오늘은 낡씨가 맑아요");}
+        else if((Integer.parseInt(in.weather_data.pty))==4||(Integer.parseInt(in.weather_data.pty))==7)
+            tipStr[tip_num++] = String.valueOf(R.string.is_snowing);
+        else
+            tipStr[tip_num++] = String.valueOf(R.string.is_raining);
+        sky = Integer.parseInt(input.weather_data.pty);
+        System.out.println(t.getBase_time());
+        System.out.println(t.getBase_date());
     }
+
+
     void getAirKor(data in) throws IOException, ParseException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=T%2FL6AKT1fsWyadGE1j3QYFXgSmOWWV375pu6qQxuQ612F22wflZp0Ey%2BdjuPCZ8XeoShMs%2FaOPn3QJfpkbTlTw%3D%3D"); /*Service Key*/
@@ -449,11 +439,9 @@ public class MainActivity extends AppCompatActivity {
         urlBuilder.append("&" + URLEncoder.encode("ver","UTF-8") + "=" + URLEncoder.encode("1.0", "UTF-8")); /*통보코드검색(PM10, PM25, O3)*/
         URL url = new URL(urlBuilder.toString());
 
-
         BufferedReader bf;
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
         String result = bf.readLine();
-
 
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject = (JSONObject)jsonParser.parse(result);
@@ -510,10 +498,56 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }//성동구 미세먼지 할당
-
-
         }
+        if (in.airKorDust_data.pm10Grade1h != null)
+            sum += Integer.parseInt(in.airKorDust_data.pm10Grade1h);
+        if (in.airKorDust_data.pm25Grade1h != null)
+            sum += Integer.parseInt(in.airKorDust_data.pm25Grade1h);
+
+        if(in.airKorDust_data.pm10Grade1h != null ) {
+            if ((Integer.parseInt(in.airKorDust_data.pm10Grade1h)>1))
+                tipStr[tip_num++] = String.valueOf(R.string.md_bad);
+        }
+        else
+        {
+            if(Integer.parseInt(in.airKorDust_data.pm10val)<31)
+            {
+                in.airKorDust_data.setPm10Grade1h("0");
+            }
+            else if(Integer.parseInt(in.airKorDust_data.pm10val)<81)
+            {
+                in.airKorDust_data.setPm10Grade1h("1");
+            }
+            else if(Integer.parseInt(in.airKorDust_data.pm10val)<151)
+            {
+                in.airKorDust_data.setPm10Grade1h("2");
+            }
+            else
+            {
+                in.airKorDust_data.setPm10Grade1h("3");
+            }
+            if (Integer.parseInt(in.airKorDust_data.pm25val) < 15)
+            {
+                in.airKorDust_data.setPm25Grade1h("0");
+            }
+            else if(Integer.parseInt(in.airKorDust_data.pm25val)<51)
+            {
+                in.airKorDust_data.setPm25Grade1h("1");
+            }
+            else if(Integer.parseInt(in.airKorDust_data.pm25val)<101)
+            {
+                in.airKorDust_data.setPm25Grade1h("2");
+            }
+            else
+            {
+                in.airKorDust_data.setPm25Grade1h("3");
+            }
+            if(in.airKorDust_data.pm10Grade1h != null && (Integer.parseInt(in.airKorDust_data.pm10Grade1h)>1))
+                tipStr[tip_num++] = String.valueOf(R.string.md_bad);
+        }
+        dust = Integer.parseInt(input.airKorDust_data.pm10Grade1h);
     }
+
     void get_Allergy_Chunsik(data in) throws IOException, ParseException {
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/HealthWthrIdxServiceV2/getAsthmaIdxV2"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=T%2FL6AKT1fsWyadGE1j3QYFXgSmOWWV375pu6qQxuQ612F22wflZp0Ey%2BdjuPCZ8XeoShMs%2FaOPn3QJfpkbTlTw%3D%3D"); /*Service Key*/
@@ -522,7 +556,6 @@ public class MainActivity extends AppCompatActivity {
         urlBuilder.append("&" + URLEncoder.encode("time","UTF-8") + "=" + URLEncoder.encode(t.getTime(), "UTF-8")); /*통보코드검색(PM10, PM25, O3)*/
         urlBuilder.append("&" + URLEncoder.encode("numOfRows", "UTF-8") + "=" + URLEncoder.encode("10", "UTF-8"));
         URL url = new URL(urlBuilder.toString());
-
 
         BufferedReader bf;
         bf = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"));
@@ -547,7 +580,16 @@ public class MainActivity extends AppCompatActivity {
             }
             in.chunsik_data.setTomorrow_val(item.get("tomorrow").toString());
         }
+        sum += Integer.parseInt(in.chunsik_data.today_val);
 
+        if((Integer.parseInt(in.chunsik_data.today_val)>1))
+        {
+            System.out.println("천식 알림 추가: " + R.string.chunsik_bad);
+            tipStr[tip_num++] = String.valueOf("천식지수가 나쁘니 주의하세요");
+        }
+
+
+        System.out.println("천식끝");
     }
 
     void get_cold(data in) throws IOException, ParseException {
@@ -581,16 +623,17 @@ public class MainActivity extends AppCompatActivity {
             JSONObject item = (JSONObject) itemArr.get(i);
 
             in.cold_data.setDate(item.get("date").toString());
-            if(item.get("today").toString().isEmpty()) {
 
-            }
-            else {
+            if(!item.get("today").toString().isEmpty())
                 in.cold_data.setToday_val(item.get("today").toString());
-            }
+
             in.cold_data.setTomorrow_val(item.get("tomorrow").toString());
         }
+        this.sum += Integer.parseInt(in.cold_data.today_val);
 
+        if((Integer.parseInt(in.cold_data.today_val)>1))
+            tipStr[tip_num++] = String.valueOf(R.string.cold_bad);
+
+        System.out.println("감기끝");
     }
-
-
 }
